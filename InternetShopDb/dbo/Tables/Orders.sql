@@ -15,8 +15,13 @@ GO
 
 ALTER TABLE [dbo].[Orders] CHECK CONSTRAINT [FK_Orders_Customers]
 GO
+
+
+GO
 ALTER TABLE [dbo].[Orders]  WITH CHECK ADD  CONSTRAINT [FK_Orders_Employees] FOREIGN KEY([EmployeeID])
 REFERENCES [dbo].[Employees] ([EmployeesID])
 GO
 
 ALTER TABLE [dbo].[Orders] CHECK CONSTRAINT [FK_Orders_Employees]
+GO
+

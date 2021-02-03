@@ -12,3 +12,5 @@ REFERENCES [dbo].[ProductDetails] ([ID])
 GO
 
 ALTER TABLE [dbo].[Products] CHECK CONSTRAINT [FK_Products_ProductDetails]
+GO
+

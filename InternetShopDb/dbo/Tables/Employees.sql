@@ -1,8 +1,8 @@
 ﻿CREATE TABLE [dbo].[Employees](
 	[EmployeesID] [int] IDENTITY(1,1) NOT NULL,
-	[FirstName] [nvarchar](50) NULL,
-	[LastName] [nvarchar](50) NULL,
-	[Post] [nvarchar](50) NOT NULL,
+	[FirstName] [nvarchar](50) NOT NULL,
+	[LastName] [nvarchar](50) NOT NULL,
+	[Post] [nvarchar](50) NULL,
 	[Salary] [money] NOT NULL,
 	[PriorSalary] [money] NULL,
  CONSTRAINT [PK_Employees] PRIMARY KEY CLUSTERED 
