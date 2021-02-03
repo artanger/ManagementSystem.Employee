@@ -15,12 +15,12 @@
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
-        @*<th>
-            @Html.DisplayNameFor(model => model.ProductDetails.Color)
+        <th>
+            @Html.DisplayNameFor(model => model.ProductDetails.FirstOrDefault().Color)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Stocks.ProductID)
-        </th>*@
+            @Html.DisplayNameFor(model => model.Stocks.FirstOrDefault().ProductID)
+        </th>
         <th></th>
     </tr>
 
