@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="InternetShopDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="InternetShopDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Customers">
           <Key>
             <PropertyRef Name="ID" />
@@ -22,9 +22,9 @@
             <PropertyRef Name="EmployeesID" />
           </Key>
           <Property Name="EmployeesID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
-          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
-          <Property Name="Post" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Post" Type="nvarchar" MaxLength="50" />
           <Property Name="Salary" Type="money" Nullable="false" />
           <Property Name="PriorSalary" Type="money" />
         </EntityType>
@@ -37,6 +37,7 @@
           <Property Name="BirthDate" Type="date" Nullable="false" />
           <Property Name="Address" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Phone" Type="char" MaxLength="12" Nullable="false" />
+          <Property Name="EmployeesID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="OrderDetails">
           <Key>
@@ -83,13 +84,13 @@
         </EntityType>
         <Association Name="FK_EmployeesInfo_Employees">
           <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
-          <End Role="EmployeesInfo" Type="Self.EmployeesInfo" Multiplicity="0..1" />
+          <End Role="EmployeesInfo" Type="Self.EmployeesInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employees">
               <PropertyRef Name="EmployeesID" />
             </Principal>
             <Dependent Role="EmployeesInfo">
-              <PropertyRef Name="ID" />
+              <PropertyRef Name="EmployeesID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -203,8 +204,7 @@
             <End Role="Stocks" EntitySet="Stocks" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="InternetShopDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -226,13 +226,13 @@
             <PropertyRef Name="EmployeesID" />
           </Key>
           <Property Name="EmployeesID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Post" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Post" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Salary" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="PriorSalary" Type="Decimal" Precision="19" Scale="4" />
-          <NavigationProperty Name="EmployeesInfo" Relationship="Self.FK_EmployeesInfo_Employees" FromRole="Employees" ToRole="EmployeesInfo" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Employees" FromRole="Employees" ToRole="Orders" />
+          <NavigationProperty Name="EmployeesInfo" Relationship="InternetShopDBModel.FK_EmployeesInfo_Employees1" FromRole="Employees" ToRole="EmployeesInfo" />
         </EntityType>
         <EntityType Name="EmployeesInfo">
           <Key>
@@ -243,7 +243,8 @@
           <Property Name="BirthDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Phone" Type="String" MaxLength="12" FixedLength="true" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Employees" Relationship="Self.FK_EmployeesInfo_Employees" FromRole="EmployeesInfo" ToRole="Employees" />
+          <Property Name="EmployeesID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Employees" Relationship="InternetShopDBModel.FK_EmployeesInfo_Employees1" FromRole="EmployeesInfo" ToRole="Employees" />
         </EntityType>
         <EntityType Name="OrderDetails">
           <Key>
@@ -307,18 +308,6 @@
             </Principal>
             <Dependent Role="Orders">
               <PropertyRef Name="CustomerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_EmployeesInfo_Employees">
-          <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
-          <End Role="EmployeesInfo" Type="Self.EmployeesInfo" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="Employees">
-              <PropertyRef Name="EmployeesID" />
-            </Principal>
-            <Dependent Role="EmployeesInfo">
-              <PropertyRef Name="ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -395,10 +384,6 @@
             <End Role="Customers" EntitySet="Customers" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK_EmployeesInfo_Employees" Association="Self.FK_EmployeesInfo_Employees">
-            <End Role="Employees" EntitySet="Employees" />
-            <End Role="EmployeesInfo" EntitySet="EmployeesInfo" />
-          </AssociationSet>
           <AssociationSet Name="FK_Orders_Employees" Association="Self.FK_Orders_Employees">
             <End Role="Employees" EntitySet="Employees" />
             <End Role="Orders" EntitySet="Orders" />
@@ -419,7 +404,23 @@
             <End Role="Products" EntitySet="Products" />
             <End Role="Stocks" EntitySet="Stocks" />
           </AssociationSet>
+          <AssociationSet Name="FK_EmployeesInfo_Employees1" Association="InternetShopDBModel.FK_EmployeesInfo_Employees1">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="EmployeesInfo" EntitySet="EmployeesInfo" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK_EmployeesInfo_Employees1">
+          <End Type="InternetShopDBModel.Employees" Role="Employees" Multiplicity="1" />
+          <End Type="InternetShopDBModel.EmployeesInfo" Role="EmployeesInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeesID" />
+            </Principal>
+            <Dependent Role="EmployeesInfo">
+              <PropertyRef Name="EmployeesID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -454,6 +455,7 @@
           <EntitySetMapping Name="EmployeesInfo">
             <EntityTypeMapping TypeName="InternetShopDBModel.EmployeesInfo">
               <MappingFragment StoreEntitySet="EmployeesInfo">
+                <ScalarProperty Name="EmployeesID" ColumnName="EmployeesID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="MaritalStatus" ColumnName="MaritalStatus" />
                 <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />

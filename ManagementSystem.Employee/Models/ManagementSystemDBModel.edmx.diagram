@@ -7,19 +7,19 @@
       <Diagram DiagramId="6e527c2662c545fc9e7ecf2dcc8df411" Name="Diagram1">
         <EntityTypeShape EntityType="InternetShopDBModel.Customers" Width="1.5" PointX="0.75" PointY="6.625" IsExpanded="true" />
         <EntityTypeShape EntityType="InternetShopDBModel.Employees" Width="1.5" PointX="0.75" PointY="10" IsExpanded="true" />
-        <EntityTypeShape EntityType="InternetShopDBModel.EmployeesInfo" Width="1.5" PointX="3" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="InternetShopDBModel.EmployeesInfo" Width="1.5" PointX="6.125" PointY="11.875" IsExpanded="true" />
         <EntityTypeShape EntityType="InternetShopDBModel.OrderDetails" Width="1.5" PointX="5.25" PointY="2.25" IsExpanded="true" />
         <EntityTypeShape EntityType="InternetShopDBModel.Orders" Width="1.5" PointX="3" PointY="8.375" IsExpanded="true" />
         <EntityTypeShape EntityType="InternetShopDBModel.ProductDetails" Width="1.5" PointX="0.75" PointY="2.625" IsExpanded="true" />
         <EntityTypeShape EntityType="InternetShopDBModel.Products" Width="1.5" PointX="3" PointY="2.5" IsExpanded="true" />
         <EntityTypeShape EntityType="InternetShopDBModel.Stocks" Width="1.5" PointX="5.25" PointY="6" IsExpanded="true" />
         <AssociationConnector Association="InternetShopDBModel.FK_Orders_Customers" ManuallyRouted="false" />
-        <AssociationConnector Association="InternetShopDBModel.FK_EmployeesInfo_Employees" ManuallyRouted="false" />
         <AssociationConnector Association="InternetShopDBModel.FK_Orders_Employees" ManuallyRouted="false" />
         <AssociationConnector Association="InternetShopDBModel.FK_OrderDetails_Orders1" ManuallyRouted="false" />
         <AssociationConnector Association="InternetShopDBModel.FK_OrderDetails_Products" ManuallyRouted="false" />
         <AssociationConnector Association="InternetShopDBModel.FK_Products_ProductDetails" ManuallyRouted="false" />
         <AssociationConnector Association="InternetShopDBModel.FK_Stocks_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="InternetShopDBModel.FK_EmployeesInfo_Employees1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

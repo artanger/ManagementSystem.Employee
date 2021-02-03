@@ -19,6 +19,7 @@ namespace ManagementSystem.Employee.Models
         public System.DateTime BirthDate { get; set; }
         public string Address { get; set; }
         public string Phone { get; set; }
+        public int EmployeesID { get; set; }
     
         public virtual Employees Employees { get; set; }
     }

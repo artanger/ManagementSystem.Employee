@@ -18,6 +18,7 @@ namespace ManagementSystem.Employee.Models
         public Employees()
         {
             this.Orders = new HashSet<Orders>();
+            this.EmployeesInfo = new HashSet<EmployeesInfo>();
         }
     
         public int EmployeesID { get; set; }
@@ -27,8 +28,9 @@ namespace ManagementSystem.Employee.Models
         public decimal Salary { get; set; }
         public Nullable<decimal> PriorSalary { get; set; }
     
-        public virtual EmployeesInfo EmployeesInfo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Orders> Orders { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EmployeesInfo> EmployeesInfo { get; set; }
     }
 }
