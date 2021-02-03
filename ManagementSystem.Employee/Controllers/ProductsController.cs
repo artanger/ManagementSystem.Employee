@@ -10,107 +10,116 @@ using ManagementSystem.Employee.Models;
 
 namespace ManagementSystem.Employee.Controllers
 {
-    public class EmployeesController : Controller
+    public class ProductsController : Controller
     {
         private InternetShopDBEntities db = new InternetShopDBEntities();
 
-        // GET: Employees
+        // GET: Products
         public ActionResult Index()
         {
-            return View(db.Employees.ToList());
+            var products = db.Products.Include(p => p.ProductDetails).Include(p => p.Stocks);
+            return View(products.ToList());
         }
 
-        // GET: Employees/Details/5
+        // GET: Products/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employees employees = db.Employees.Find(id);
-            if (employees == null)
+            Products products = db.Products.Find(id);
+            if (products == null)
             {
                 return HttpNotFound();
             }
-            return View(employees);
+            return View(products);
         }
 
-        // GET: Employees/Create
+        // GET: Products/Create
         public ActionResult Create()
         {
+            ViewBag.ID = new SelectList(db.ProductDetails, "ID", "Color");
+            ViewBag.ID = new SelectList(db.Stocks, "ProductID", "ProductID");
             return View();
         }
 
-        // POST: Employees/Create
+        // POST: Products/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EmployeesID,FirstName,LastName,Post,Salary,PriorSalary")] Employees employees)
+        public ActionResult Create([Bind(Include = "ID,Name")] Products products)
         {
             if (ModelState.IsValid)
             {
-                db.Employees.Add(employees);
+                db.Products.Add(products);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(employees);
+            ViewBag.ID = new SelectList(db.ProductDetails, "ID", "Color", products.ID);
+            ViewBag.ID = new SelectList(db.Stocks, "ProductID", "ProductID", products.ID);
+            return View(products);
         }
 
-        // GET: Employees/Edit/5
+        // GET: Products/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employees employees = db.Employees.Find(id);
-            if (employees == null)
+            Products products = db.Products.Find(id);
+            if (products == null)
             {
                 return HttpNotFound();
             }
-            return View(employees);
+            ViewBag.ID = new SelectList(db.ProductDetails, "ID", "Color", products.ID);
+            ViewBag.ID = new SelectList(db.Stocks, "ProductID", "ProductID", products.ID);
+            return View(products);
         }
 
-        // POST: Employees/Edit/5
+        // POST: Products/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EmployeesID,FirstName,LastName,Post,Salary,PriorSalary")] Employees employees)
+        public ActionResult Edit([Bind(Include = "ID,Name")] Products products)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(employees).State = EntityState.Modified;
+                db.Entry(products).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(employees);
+            ViewBag.ID = new SelectList(db.ProductDetails, "ID", "Color", products.ID);
+            ViewBag.ID = new SelectList(db.Stocks, "ProductID", "ProductID", products.ID);
+            return View(products);
         }
 
-        // GET: Employees/Delete/5
+        // GET: Products/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employees employees = db.Employees.Find(id);
-            if (employees == null)
+            Products products = db.Products.Find(id);
+            if (products == null)
             {
                 return HttpNotFound();
             }
-            return View(employees);
+            return View(products);
         }
 
-        // POST: Employees/Delete/5
+        // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Employees employees = db.Employees.Find(id);
-            db.Employees.Remove(employees);
+            Products products = db.Products.Find(id);
+            db.Products.Remove(products);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

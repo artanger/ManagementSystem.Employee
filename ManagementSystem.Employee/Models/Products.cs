@@ -18,6 +18,8 @@ namespace ManagementSystem.Employee.Models
         public Products()
         {
             this.OrderDetails = new HashSet<OrderDetails>();
+            this.ProductDetails = new HashSet<ProductDetails>();
+            this.Stocks = new HashSet<Stocks>();
         }
     
         public int ID { get; set; }
@@ -25,7 +27,9 @@ namespace ManagementSystem.Employee.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderDetails> OrderDetails { get; set; }
-        public virtual ProductDetails ProductDetails { get; set; }
-        public virtual Stocks Stocks { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProductDetails> ProductDetails { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Stocks> Stocks { get; set; }
     }
 }

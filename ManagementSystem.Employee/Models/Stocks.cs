@@ -16,6 +16,7 @@ namespace ManagementSystem.Employee.Models
     {
         public int ProductID { get; set; }
         public int Qty { get; set; }
+        public int ID { get; set; }
     
         public virtual Products Products { get; set; }
     }

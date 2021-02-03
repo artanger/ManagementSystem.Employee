@@ -17,6 +17,7 @@ namespace ManagementSystem.Employee.Models
         public int ID { get; set; }
         public string Color { get; set; }
         public string Description { get; set; }
+        public Nullable<int> ProductID { get; set; }
     
         public virtual Products Products { get; set; }
     }

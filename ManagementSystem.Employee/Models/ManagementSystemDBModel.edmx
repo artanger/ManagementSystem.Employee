@@ -67,6 +67,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Color" Type="nchar" MaxLength="20" />
           <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="ProductID" Type="int" />
         </EntityType>
         <EntityType Name="Products">
           <Key>
@@ -77,10 +78,11 @@
         </EntityType>
         <EntityType Name="Stocks">
           <Key>
-            <PropertyRef Name="ProductID" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
           <Property Name="Qty" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <Association Name="FK_EmployeesInfo_Employees">
           <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
@@ -142,21 +144,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Products_ProductDetails">
-          <End Role="ProductDetails" Type="Self.ProductDetails" Multiplicity="1" />
+        <Association Name="FK_ProductDetails_Products">
           <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
+          <End Role="ProductDetails" Type="Self.ProductDetails" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="ProductDetails">
+            <Principal Role="Products">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="Products">
-              <PropertyRef Name="ID" />
+            <Dependent Role="ProductDetails">
+              <PropertyRef Name="ProductID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Stocks_Products">
           <End Role="Products" Type="Self.Products" Multiplicity="1" />
-          <End Role="Stocks" Type="Self.Stocks" Multiplicity="0..1" />
+          <End Role="Stocks" Type="Self.Stocks" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Products">
               <PropertyRef Name="ID" />
@@ -195,9 +197,9 @@
             <End Role="Employees" EntitySet="Employees" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK_Products_ProductDetails" Association="Self.FK_Products_ProductDetails">
-            <End Role="ProductDetails" EntitySet="ProductDetails" />
+          <AssociationSet Name="FK_ProductDetails_Products" Association="Self.FK_ProductDetails_Products">
             <End Role="Products" EntitySet="Products" />
+            <End Role="ProductDetails" EntitySet="ProductDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_Stocks_Products" Association="Self.FK_Stocks_Products">
             <End Role="Products" EntitySet="Products" />
@@ -208,6 +210,44 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="InternetShopDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="InternetShopDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Customers" EntityType="InternetShopDBModel.Customers" />
+          <EntitySet Name="Employees" EntityType="InternetShopDBModel.Employees" />
+          <EntitySet Name="EmployeesInfo" EntityType="InternetShopDBModel.EmployeesInfo" />
+          <EntitySet Name="OrderDetails" EntityType="InternetShopDBModel.OrderDetails" />
+          <EntitySet Name="Orders" EntityType="InternetShopDBModel.Orders" />
+          <EntitySet Name="ProductDetails" EntityType="InternetShopDBModel.ProductDetails" />
+          <EntitySet Name="Products" EntityType="InternetShopDBModel.Products" />
+          <EntitySet Name="Stocks" EntityType="InternetShopDBModel.Stocks" />
+          <AssociationSet Name="FK_Orders_Customers" Association="InternetShopDBModel.FK_Orders_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeesInfo_Employees" Association="InternetShopDBModel.FK_EmployeesInfo_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="EmployeesInfo" EntitySet="EmployeesInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Employees" Association="InternetShopDBModel.FK_Orders_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Orders1" Association="InternetShopDBModel.FK_OrderDetails_Orders1">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Products" Association="InternetShopDBModel.FK_OrderDetails_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductDetails_Products" Association="InternetShopDBModel.FK_ProductDetails_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="ProductDetails" EntitySet="ProductDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stocks_Products" Association="InternetShopDBModel.FK_Stocks_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Stocks" EntitySet="Stocks" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="Customers">
           <Key>
             <PropertyRef Name="ID" />
@@ -219,32 +259,32 @@
           <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Phone" Type="String" MaxLength="12" FixedLength="true" Unicode="false" />
           <Property Name="DateInSystem" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Customers" FromRole="Customers" ToRole="Orders" />
+          <NavigationProperty Name="Orders" Relationship="InternetShopDBModel.FK_Orders_Customers" FromRole="Customers" ToRole="Orders" />
         </EntityType>
         <EntityType Name="Employees">
           <Key>
             <PropertyRef Name="EmployeesID" />
           </Key>
           <Property Name="EmployeesID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Post" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Salary" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Salary" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
           <Property Name="PriorSalary" Type="Decimal" Precision="19" Scale="4" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Employees" FromRole="Employees" ToRole="Orders" />
-          <NavigationProperty Name="EmployeesInfo" Relationship="InternetShopDBModel.FK_EmployeesInfo_Employees1" FromRole="Employees" ToRole="EmployeesInfo" />
+          <NavigationProperty Name="EmployeesInfo" Relationship="InternetShopDBModel.FK_EmployeesInfo_Employees" FromRole="Employees" ToRole="EmployeesInfo" />
+          <NavigationProperty Name="Orders" Relationship="InternetShopDBModel.FK_Orders_Employees" FromRole="Employees" ToRole="Orders" />
         </EntityType>
         <EntityType Name="EmployeesInfo">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MaritalStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MaritalStatus" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="BirthDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Phone" Type="String" MaxLength="12" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" Nullable="false" MaxLength="12" FixedLength="true" Unicode="false" />
           <Property Name="EmployeesID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Employees" Relationship="InternetShopDBModel.FK_EmployeesInfo_Employees1" FromRole="EmployeesInfo" ToRole="Employees" />
+          <NavigationProperty Name="Employees" Relationship="InternetShopDBModel.FK_EmployeesInfo_Employees" FromRole="EmployeesInfo" ToRole="Employees" />
         </EntityType>
         <EntityType Name="OrderDetails">
           <Key>
@@ -255,10 +295,10 @@
           <Property Name="LineItem" Type="Int32" Nullable="false" />
           <Property Name="ProductID" Type="Int32" Nullable="false" />
           <Property Name="Qty" Type="Int32" Nullable="false" />
-          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
           <Property Name="TotalPrice" Type="Decimal" Precision="19" Scale="4" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK_OrderDetails_Orders1" FromRole="OrderDetails" ToRole="Orders" />
-          <NavigationProperty Name="Products" Relationship="Self.FK_OrderDetails_Products" FromRole="OrderDetails" ToRole="Products" />
+          <NavigationProperty Name="Orders" Relationship="InternetShopDBModel.FK_OrderDetails_Orders1" FromRole="OrderDetails" ToRole="Orders" />
+          <NavigationProperty Name="Products" Relationship="InternetShopDBModel.FK_OrderDetails_Products" FromRole="OrderDetails" ToRole="Products" />
         </EntityType>
         <EntityType Name="Orders">
           <Key>
@@ -268,9 +308,9 @@
           <Property Name="CustomerID" Type="Int32" Nullable="false" />
           <Property Name="EmployeeID" Type="Int32" Nullable="false" />
           <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="Customers" Relationship="Self.FK_Orders_Customers" FromRole="Orders" ToRole="Customers" />
-          <NavigationProperty Name="Employees" Relationship="Self.FK_Orders_Employees" FromRole="Orders" ToRole="Employees" />
-          <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetails_Orders1" FromRole="Orders" ToRole="OrderDetails" />
+          <NavigationProperty Name="Customers" Relationship="InternetShopDBModel.FK_Orders_Customers" FromRole="Orders" ToRole="Customers" />
+          <NavigationProperty Name="Employees" Relationship="InternetShopDBModel.FK_Orders_Employees" FromRole="Orders" ToRole="Employees" />
+          <NavigationProperty Name="OrderDetails" Relationship="InternetShopDBModel.FK_OrderDetails_Orders1" FromRole="Orders" ToRole="OrderDetails" />
         </EntityType>
         <EntityType Name="ProductDetails">
           <Key>
@@ -279,7 +319,8 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Color" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Products" Relationship="Self.FK_Products_ProductDetails" FromRole="ProductDetails" ToRole="Products" />
+          <Property Name="ProductID" Type="Int32" />
+          <NavigationProperty Name="Products" Relationship="InternetShopDBModel.FK_ProductDetails_Products" FromRole="ProductDetails" ToRole="Products" />
         </EntityType>
         <EntityType Name="Products">
           <Key>
@@ -287,21 +328,22 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetails_Products" FromRole="Products" ToRole="OrderDetails" />
-          <NavigationProperty Name="ProductDetails" Relationship="Self.FK_Products_ProductDetails" FromRole="Products" ToRole="ProductDetails" />
-          <NavigationProperty Name="Stocks" Relationship="Self.FK_Stocks_Products" FromRole="Products" ToRole="Stocks" />
+          <NavigationProperty Name="OrderDetails" Relationship="InternetShopDBModel.FK_OrderDetails_Products" FromRole="Products" ToRole="OrderDetails" />
+          <NavigationProperty Name="ProductDetails" Relationship="InternetShopDBModel.FK_ProductDetails_Products" FromRole="Products" ToRole="ProductDetails" />
+          <NavigationProperty Name="Stocks" Relationship="InternetShopDBModel.FK_Stocks_Products" FromRole="Products" ToRole="Stocks" />
         </EntityType>
         <EntityType Name="Stocks">
           <Key>
-            <PropertyRef Name="ProductID" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
           <Property Name="Qty" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Products" Relationship="Self.FK_Stocks_Products" FromRole="Stocks" ToRole="Products" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Products" Relationship="InternetShopDBModel.FK_Stocks_Products" FromRole="Stocks" ToRole="Products" />
         </EntityType>
         <Association Name="FK_Orders_Customers">
-          <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
-          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <End Type="InternetShopDBModel.Customers" Role="Customers" Multiplicity="1" />
+          <End Type="InternetShopDBModel.Orders" Role="Orders" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customers">
               <PropertyRef Name="ID" />
@@ -311,105 +353,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Orders_Employees">
-          <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
-          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employees">
-              <PropertyRef Name="EmployeesID" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="EmployeeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_OrderDetails_Orders1">
-          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
-          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Orders">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="OrderDetails">
-              <PropertyRef Name="OrderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_OrderDetails_Products">
-          <End Role="Products" Type="Self.Products" Multiplicity="1" />
-          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="OrderDetails">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Products_ProductDetails">
-          <End Role="ProductDetails" Type="Self.ProductDetails" Multiplicity="1" />
-          <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="ProductDetails">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Products">
-              <PropertyRef Name="ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Stocks_Products">
-          <End Role="Products" Type="Self.Products" Multiplicity="1" />
-          <End Role="Stocks" Type="Self.Stocks" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Stocks">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityContainer Name="InternetShopDBEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Customers" EntityType="Self.Customers" />
-          <EntitySet Name="Employees" EntityType="Self.Employees" />
-          <EntitySet Name="EmployeesInfo" EntityType="Self.EmployeesInfo" />
-          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" />
-          <EntitySet Name="Orders" EntityType="Self.Orders" />
-          <EntitySet Name="ProductDetails" EntityType="Self.ProductDetails" />
-          <EntitySet Name="Products" EntityType="Self.Products" />
-          <EntitySet Name="Stocks" EntityType="Self.Stocks" />
-          <AssociationSet Name="FK_Orders_Customers" Association="Self.FK_Orders_Customers">
-            <End Role="Customers" EntitySet="Customers" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Orders_Employees" Association="Self.FK_Orders_Employees">
-            <End Role="Employees" EntitySet="Employees" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OrderDetails_Orders1" Association="Self.FK_OrderDetails_Orders1">
-            <End Role="Orders" EntitySet="Orders" />
-            <End Role="OrderDetails" EntitySet="OrderDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OrderDetails_Products" Association="Self.FK_OrderDetails_Products">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="OrderDetails" EntitySet="OrderDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Products_ProductDetails" Association="Self.FK_Products_ProductDetails">
-            <End Role="ProductDetails" EntitySet="ProductDetails" />
-            <End Role="Products" EntitySet="Products" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Stocks_Products" Association="Self.FK_Stocks_Products">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="Stocks" EntitySet="Stocks" />
-          </AssociationSet>
-          <AssociationSet Name="FK_EmployeesInfo_Employees1" Association="InternetShopDBModel.FK_EmployeesInfo_Employees1">
-            <End Role="Employees" EntitySet="Employees" />
-            <End Role="EmployeesInfo" EntitySet="EmployeesInfo" />
-          </AssociationSet>
-        </EntityContainer>
-        <Association Name="FK_EmployeesInfo_Employees1">
+        <Association Name="FK_EmployeesInfo_Employees">
           <End Type="InternetShopDBModel.Employees" Role="Employees" Multiplicity="1" />
           <End Type="InternetShopDBModel.EmployeesInfo" Role="EmployeesInfo" Multiplicity="*" />
           <ReferentialConstraint>
@@ -421,7 +365,67 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <Association Name="FK_Orders_Employees">
+          <End Type="InternetShopDBModel.Employees" Role="Employees" Multiplicity="1" />
+          <End Type="InternetShopDBModel.Orders" Role="Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeesID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_Orders1">
+          <End Type="InternetShopDBModel.Orders" Role="Orders" Multiplicity="1" />
+          <End Type="InternetShopDBModel.OrderDetails" Role="OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_Products">
+          <End Type="InternetShopDBModel.Products" Role="Products" Multiplicity="1" />
+          <End Type="InternetShopDBModel.OrderDetails" Role="OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductDetails_Products">
+          <End Type="InternetShopDBModel.Products" Role="Products" Multiplicity="0..1" />
+          <End Type="InternetShopDBModel.ProductDetails" Role="ProductDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ProductDetails">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stocks_Products">
+          <End Type="InternetShopDBModel.Products" Role="Products" Multiplicity="1" />
+          <End Type="InternetShopDBModel.Stocks" Role="Stocks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Stocks">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -430,25 +434,25 @@
           <EntitySetMapping Name="Customers">
             <EntityTypeMapping TypeName="InternetShopDBModel.Customers">
               <MappingFragment StoreEntitySet="Customers">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
                 <ScalarProperty Name="DateInSystem" ColumnName="DateInSystem" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Employees">
             <EntityTypeMapping TypeName="InternetShopDBModel.Employees">
               <MappingFragment StoreEntitySet="Employees">
-                <ScalarProperty Name="EmployeesID" ColumnName="EmployeesID" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="Post" ColumnName="Post" />
-                <ScalarProperty Name="Salary" ColumnName="Salary" />
                 <ScalarProperty Name="PriorSalary" ColumnName="PriorSalary" />
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
+                <ScalarProperty Name="Post" ColumnName="Post" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="EmployeesID" ColumnName="EmployeesID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -456,58 +460,60 @@
             <EntityTypeMapping TypeName="InternetShopDBModel.EmployeesInfo">
               <MappingFragment StoreEntitySet="EmployeesInfo">
                 <ScalarProperty Name="EmployeesID" ColumnName="EmployeesID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="MaritalStatus" ColumnName="MaritalStatus" />
-                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="MaritalStatus" ColumnName="MaritalStatus" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OrderDetails">
             <EntityTypeMapping TypeName="InternetShopDBModel.OrderDetails">
               <MappingFragment StoreEntitySet="OrderDetails">
-                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
-                <ScalarProperty Name="LineItem" ColumnName="LineItem" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="Qty" ColumnName="Qty" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="LineItem" ColumnName="LineItem" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="InternetShopDBModel.Orders">
               <MappingFragment StoreEntitySet="Orders">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ProductDetails">
             <EntityTypeMapping TypeName="InternetShopDBModel.ProductDetails">
               <MappingFragment StoreEntitySet="ProductDetails">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="InternetShopDBModel.Products">
               <MappingFragment StoreEntitySet="Products">
-                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Stocks">
             <EntityTypeMapping TypeName="InternetShopDBModel.Stocks">
               <MappingFragment StoreEntitySet="Stocks">
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

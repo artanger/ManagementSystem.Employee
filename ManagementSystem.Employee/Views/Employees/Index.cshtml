@@ -27,9 +27,6 @@
         <th>
             @Html.DisplayNameFor(model => model.PriorSalary)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EmployeesInfo.MaritalStatus)
-        </th>
         <th></th>
     </tr>
 
@@ -49,9 +46,6 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.PriorSalary)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EmployeesInfo.MaritalStatus)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.EmployeesID }) |
