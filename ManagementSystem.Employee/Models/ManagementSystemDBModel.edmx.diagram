@@ -16,7 +16,7 @@
         <AssociationConnector Association="InternetShopDBModel.FK_Orders_Customers" />
         <AssociationConnector Association="InternetShopDBModel.FK_EmployeesInfo_Employees" />
         <AssociationConnector Association="InternetShopDBModel.FK_Orders_Employees" />
-        <AssociationConnector Association="InternetShopDBModel.FK_OrderDetails_Orders1" />
+        <AssociationConnector Association="InternetShopDBModel.FK_OrderDetails_Orders" />
         <AssociationConnector Association="InternetShopDBModel.FK_OrderDetails_Products" />
         <AssociationConnector Association="InternetShopDBModel.FK_ProductDetails_Products" />
         <AssociationConnector Association="InternetShopDBModel.FK_Stocks_Products" />

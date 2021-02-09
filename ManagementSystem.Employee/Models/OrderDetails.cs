@@ -15,11 +15,11 @@ namespace ManagementSystem.Employee.Models
     public partial class OrderDetails
     {
         public int OrderID { get; set; }
-        public int LineItem { get; set; }
         public int ProductID { get; set; }
         public int Qty { get; set; }
         public decimal Price { get; set; }
         public Nullable<decimal> TotalPrice { get; set; }
+        public int ID { get; set; }
     
         public virtual Orders Orders { get; set; }
         public virtual Products Products { get; set; }

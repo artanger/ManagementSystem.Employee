@@ -1,9 +1,10 @@
 ﻿CREATE TABLE [dbo].[Stocks](
-	[ProductID] [int] IDENTITY(1,1) NOT NULL,
-	[Qty] [int] NOT NULL,
- CONSTRAINT [PK_Stocks] PRIMARY KEY CLUSTERED 
+	[ProductID] [int] NOT NULL,
+	[Qty] [int] NULL CONSTRAINT [DF_Stocks_Qty]  DEFAULT ((0)),
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+ CONSTRAINT [PK_Stocks_1] PRIMARY KEY CLUSTERED 
 (
-	[ProductID] ASC
+	[ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -12,5 +13,29 @@ REFERENCES [dbo].[Products] ([ID])
 GO
 
 ALTER TABLE [dbo].[Stocks] CHECK CONSTRAINT [FK_Stocks_Products]
+GO
+
+
+GO
+
+
+GO
+
+
+GO
+
+
+GO
+
+
+GO
+
+
+GO
+
+
+GO
+
+
 GO
 
