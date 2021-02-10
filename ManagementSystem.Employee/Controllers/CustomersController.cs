@@ -17,7 +17,6 @@ namespace ManagementSystem.Employee.Controllers
         // GET: Customers
         public ActionResult Index()
         {
-
             return View(db.Customers.ToList());
         }
 
